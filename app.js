@@ -1,12 +1,20 @@
 var Tx = require('ethereumjs-tx').Transaction
 const Web3 = require('web3')
-const web3 = new Web3('https://mainnet.infura.io/v3/26899ef6feb74fba84a1b04fca65199b')
+const web3 = new Web3('https://ropsten.infura.io/v3/26899ef6feb74fba84a1b04fca65199b')
 
 const account1 = '0x5b6d18054a6c88923F9202607726c4c50e091822'
 const account2 = '0x6302d56f3030E17B477bEFB9000d01d210C8882D'
 
 const privateKey1 = Buffer.from('8846a95a810caca9eee3751e39219ba96ebdbf6d11f5498ca0df78776a67e696', 'hex')
 const privateKey2 = Buffer.from('9ca0b28d6438296d8be8ae90b7b0ad68280101be8e4b38e0dfea1efdd0eb3e72', 'hex')
+/*
+,,There was issue on truffle wallet provider url. 
+I was going to use Goerli and there was enough fund but I wrote with mainnet url. 
+So it was checking mainnet account and showing me insufficient balance. 
+After I indicate wallet provider to goerli then it worked. Thanks."
+From: https://ethereum.stackexchange.com/questions/93428/error-returned-error-insufficient-funds-for-gas-price-value-at-object-erro
+and the new tx()...
+*/
 /*
 
 web3.eth.getBalance(account1, (err, bal) => {
@@ -37,7 +45,7 @@ web3.eth.getTransactionCount(account1, (err, txCount) => {
     //sign the transaction
    //TODO: This section is not working. CMD write  the 39. row is the problem . Tx not a constuctor 
    console.log(txObject)
-   var tx = new Tx(txObject) 
+   var tx = new Tx(txObject, { chain: 'ropsten' }) 
     tx.sign(privateKey1)
 
     const serializedTransaction = tx.serialize()
@@ -46,6 +54,6 @@ web3.eth.getTransactionCount(account1, (err, txCount) => {
     // broadcast the transaction
 
     web3.eth.sendSignedTransaction(raw, (err, txHash) =>{
-        console.log('Tx hash: ', txHash)
+        console.log(' Tx hash: ', txHash, 'err:', err)
     } ) 
 })
